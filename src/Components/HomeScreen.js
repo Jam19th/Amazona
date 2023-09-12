@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { Row, Col } from "react-bootstrap";
 import Product from "./Product";
+import { Helmet } from "react-helmet-async";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -9,7 +10,7 @@ const reducer = (state, action) => {
         case 'FETCH_SUCCESS':
             return { ...state, products: action.payload, loading: false, error: '' }
         case 'FETCH_FAIL':
-            return { ...state, products: [], loading: false, error: action.payload }
+            return { ...state, loading: false, error: action.payload }
         default:
             return state;
     }
@@ -39,6 +40,9 @@ export default function HomeScreen() {
 
     return (
         <div>
+            <Helmet>
+                <title>Amazona</title>
+            </Helmet>
             <h1> Featured Products</h1>
             <div className="products">
                 {

@@ -69,3 +69,7 @@ main {
   background-color: #282c34;
   color: white;
 }
+
+.img-large {
+  max-width: 100%;
+}

@@ -18,7 +18,7 @@ const Seed_Data = {
             category: "Category 1",
             image: "http://placekitten.com/200/200",
             price: 150,
-            countInStock: 20,
+            countInStock: 0,
             brand: "Brand 2",
             rating: 4.0,
             numReviews: 8,
