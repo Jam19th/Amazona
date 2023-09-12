@@ -1,31 +1,22 @@
-import Seed_Data from "./Seed_Data";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import HomeScreen from "./Components/HomeScreen";
+import ProductScreen from "./Components/ProductScreen";
 
 function App() {
   return (
-    <div className="App">
-      <header>
-        <a href="/">Amazona</a>
-      </header>
-      <main>
-        <h1> Featured Products</h1>
-        <div className="products">
-          {Seed_Data.products.map(product => (
-            <div key={product.slug} className="product">
-              <a href={`/product/${product.slug}`}>
-                <img src={product.image} alt={product.name} />
-              </a>
-              <div className="product-info">
-                <a href={`/product/${product.slug}`}>
-                  <p>{product.name}</p>
-                </a>
-                <p><strong>${product.price}</strong></p>
-                <button>Add to Cart</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-    </div>
+    <BrowserRouter>
+      <div>
+        <header>
+          <Link to="/">Amazona</Link>
+        </header>
+        <main>
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/product/:slug" element={<ProductScreen />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 
