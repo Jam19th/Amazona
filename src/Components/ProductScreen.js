@@ -3,6 +3,9 @@ import { useEffect, useReducer } from "react";
 import { Badge, Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import Rating from "./Rating";
 import { Helmet } from "react-helmet-async";
+import LoadingBox from "./LoadingBox";
+import MessageBox from "./MessageBox";
+import { getError } from "../utils";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -36,7 +39,7 @@ export default function ProductScreen() {
                 dispatch({ type: 'FETCH_SUCCESS', payload: data })
             }
             catch (err) {
-                dispatch({ type: 'FETCH_FAIL', payload: err.message })
+                dispatch({ type: 'FETCH_FAIL', payload: getError(err) })
             }
         }
         fetchData()
@@ -44,9 +47,9 @@ export default function ProductScreen() {
 
     return (
         loading ? (
-            <div>Loading...</div>
+            <LoadingBox />
         ) : error ? (
-            <div>{error}</div>
+            <MessageBox variant="danger">{error}</MessageBox>
         ) : (
             <div>
                 <Row>
@@ -60,9 +63,9 @@ export default function ProductScreen() {
                     <Col md={3}>
                         <ListGroup variant="flush">
                             <ListGroup.Item>
-                    <Helmet>
-                        <title>{product.name}</title>
-                    </Helmet>
+                                <Helmet>
+                                    <title>{product.name}</title>
+                                </Helmet>
                                 <h1>{product.name}</h1>
                             </ListGroup.Item>
                             <ListGroup.Item>
