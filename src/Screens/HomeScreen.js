@@ -1,9 +1,11 @@
 import { useEffect, useReducer } from "react";
 import { Row, Col } from "react-bootstrap";
-import Product from "../Components/Product";
 import { Helmet } from "react-helmet-async";
+
+import Product from "../Components/Product";
 import LoadingBox from "../Components/LoadingBox";
 import MessageBox from "../Components/MessageBox";
+import supabase from "../supaBaseClient";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -26,18 +28,20 @@ export default function HomeScreen() {
     })
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProducts = async () => {
             dispatch({ type: 'FETCH_REQUEST' })
-            try {
-                const response = await fetch("/api/products")
-                const data = await response.json()
+            const { data, error } = await supabase
+                .from('Products')
+                .select()
+
+            if (error) {
+                dispatch({ type: 'FETCH_FAIL', payload: error.message })
+            }
+            if (data) {
                 dispatch({ type: 'FETCH_SUCCESS', payload: data })
             }
-            catch (err) {
-                dispatch({ type: 'FETCH_FAIL', payload: err.message })
-            }
         }
-        fetchData()
+        fetchProducts()
     }, [])
 
     return (
