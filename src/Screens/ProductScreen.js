@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Badge, Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
@@ -7,9 +7,9 @@ import axios from "axios";
 import { Store } from "../Store";
 import { getError } from "../utils";
 
-import Rating from "./Rating";
-import LoadingBox from "./LoadingBox";
-import MessageBox from "./MessageBox";
+import Rating from "../Components/Rating";
+import LoadingBox from "../Components/LoadingBox";
+import MessageBox from "../Components/MessageBox";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -25,6 +25,7 @@ const reducer = (state, action) => {
 }
 
 export default function ProductScreen() {
+    const navigate = useNavigate();
     const params = useParams();
     const { slug } = params;
 
@@ -38,9 +39,8 @@ export default function ProductScreen() {
         const fetchData = async () => {
             dispatch({ type: 'FETCH_REQUEST' })
             try {
-                const response = await fetch(`/api/products/${slug}`)
-                const data = await response.json()
-                dispatch({ type: 'FETCH_SUCCESS', payload: data })
+                const result = await axios.get(`/api/products/slug/${slug}`)
+                dispatch({ type: 'FETCH_SUCCESS', payload: result.data })
             }
             catch (err) {
                 dispatch({ type: 'FETCH_FAIL', payload: getError(err) })
@@ -67,6 +67,7 @@ export default function ProductScreen() {
                 quantity: quantity,
             }
         })
+        navigate('/cart')
     }
 
     return (

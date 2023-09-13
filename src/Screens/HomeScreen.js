@@ -1,9 +1,9 @@
 import { useEffect, useReducer } from "react";
 import { Row, Col } from "react-bootstrap";
-import Product from "./Product";
+import Product from "../Components/Product";
 import { Helmet } from "react-helmet-async";
-import LoadingBox from "./LoadingBox";
-import MessageBox from "./MessageBox";
+import LoadingBox from "../Components/LoadingBox";
+import MessageBox from "../Components/MessageBox";
 
 const reducer = (state, action) => {
     switch (action.type) {
