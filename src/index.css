@@ -80,3 +80,7 @@ main {
   margin: 0.5rem;
   cursor: pointer; */
 }
+
+.small-container {
+  max-width: 600px;
+}

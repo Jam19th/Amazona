@@ -38,7 +38,10 @@ export default function Product(props) {
                 <Link to={`/product/${product.slug}`}>
                     <Card.Title>{product.name}</Card.Title>
                 </Link>
-                <Rating rating={product.rating} numReviews={product.numReviews} />
+                <Rating
+                    rating={product.rating}
+                    numReviews={product.numReviews}
+                />
                 <Card.Text>${product.price}</Card.Text>
                 {product.countInStock === 0 ?
                     <Button

@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import HomeScreen from "./Screens/HomeScreen";
-import ProductScreen from "./Screens/ProductScreen";
 import { Container, Navbar, Nav, Badge } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useContext } from "react";
+
 import { Store } from "./Store";
+import HomeScreen from "./Screens/HomeScreen";
+import ProductScreen from "./Screens/ProductScreen";
 import CartScreen from "./Screens/CartScreen";
+import SignInScreen from "./Screens/SignInScreen";
 
 function App() {
   const { state } = useContext(Store)
@@ -38,7 +40,8 @@ function App() {
             <Routes>
               <Route path="/" element={<HomeScreen />} />
               <Route path="/product/:slug" element={<ProductScreen />} />
-              <Route path="/cart" element={<h1><CartScreen /></h1>} />
+              <Route path="/cart" element={<CartScreen />} />
+              <Route path="/signin" element={<SignInScreen />} />
             </Routes>
           </Container>
         </main>
