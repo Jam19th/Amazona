@@ -31,9 +31,8 @@ export default function HomeScreen() {
         const fetchProducts = async () => {
             dispatch({ type: 'FETCH_REQUEST' })
             const { data, error } = await supabase
-                .from('Products')
+                .from('products')
                 .select()
-
             if (error) {
                 dispatch({ type: 'FETCH_FAIL', payload: error.message })
             }

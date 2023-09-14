@@ -2,10 +2,12 @@ import { useEffect, useReducer, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Badge, Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
-import axios from "axios";
+import supabase from "../supaBaseClient";
+// import axios from 'axios';
+
 
 import { Store } from "../Store";
-import { getError } from "../utils";
+// import { getError } from "../utils";
 
 import Rating from "../Components/Rating";
 import LoadingBox from "../Components/LoadingBox";
@@ -23,30 +25,33 @@ const reducer = (state, action) => {
             return state;
     }
 }
-
 export default function ProductScreen() {
     const navigate = useNavigate();
     const params = useParams();
     const { slug } = params;
 
     const [{ loading, error, product }, dispatch] = useReducer(reducer, {
-        product: [],
+        product: {},
         loading: false,
         error: ''
     })
 
+    //fetch data from supabase and dispatch to reducer to update state using slug 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProduct = async () => {
             dispatch({ type: 'FETCH_REQUEST' })
-            try {
-                const result = await axios.get(`/api/products/slug/${slug}`)
-                dispatch({ type: 'FETCH_SUCCESS', payload: result.data })
+            const { data, error } = await supabase
+                .from('products')
+                .select()
+                .eq('slug', slug)
+            if (error) {
+                dispatch({ type: 'FETCH_FAIL', payload: error.message })
             }
-            catch (err) {
-                dispatch({ type: 'FETCH_FAIL', payload: getError(err) })
+            if (data) {
+                dispatch({ type: 'FETCH_SUCCESS', payload: data[0] })
             }
         }
-        fetchData()
+        fetchProduct()
     }, [slug])
 
     const { state, dispatch: ctxDispatch } = useContext(Store)
@@ -55,7 +60,11 @@ export default function ProductScreen() {
     const addToCartHandler = async () => {
         const existItem = cart.cartItems.find((x) => x._id === product._id);
         const quantity = existItem ? existItem.quantity + 1 : 1;
-        const { data } = await axios.get(`/api/products/${product._id}`);
+        // const { data } = await axios.get(`/api/products/${product._id}`);
+        const { data } = await supabase
+            .from('products')
+            .select()
+            .eq('_id', product._id)
         if (data.countInStock < quantity) {
             window.alert('Sorry. Product is out of stock');
             return;
@@ -89,7 +98,8 @@ export default function ProductScreen() {
                         <ListGroup variant="flush">
                             <ListGroup.Item>
                                 <Helmet>
-                                    <title>{product.name}</title>
+                                    {/* <title>{product.name}</title> */}
+                                    <title>{product && product.name ? product.name : 'Product Details'}</title>
                                 </Helmet>
                                 <h1>{product.name}</h1>
                             </ListGroup.Item>
@@ -112,7 +122,6 @@ export default function ProductScreen() {
                         <Card.Body>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
-
                                     <Row>
                                         <Col>Price:</Col>
                                         <Col>

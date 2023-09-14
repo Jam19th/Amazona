@@ -4,7 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { Row, Col, ListGroup, Button, Card } from 'react-bootstrap';
 import MessageBox from '../Components/MessageBox';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import supabase from '../supaBaseClient';
 
 export default function CartScreen() {
     const navigate = useNavigate()
@@ -14,7 +15,11 @@ export default function CartScreen() {
     } = state
 
     const updateCartHandler = async (item, quantity) => {
-        const { data } = await axios.get(`/api/products/${item._id}`)
+        // const { data } = await axios.get(`/api/products/${item._id}`)
+        const { data } = await supabase
+            .from('products')
+            .select()
+            .eq('_id', item._id)
         if (data.countInStock < quantity) {
             window.alert('Sorry. Product is out of stock');
             return;
